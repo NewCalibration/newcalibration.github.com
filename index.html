@@ -10,10 +10,19 @@
             padding: 0;
             overflow: hidden;
         }
+        #info {
+            position: absolute;
+            top: 0px;
+            width: 100%;
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
+    <script src="js/three.js"></script>
     <script src="js/three.min.js"></script>
+    <script src="js/stats.min.js"></script>
+    <script src="js/dat.gui.min.js"></script>
     <script>
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -23,8 +32,10 @@
 
         //parameters
         var squareSize = 8;
-        var rows = 9;
-        var cols = 16;
+        var rows = 8;
+        var cols = 8;
+        //var rotationSpeed;
+        //var bouncingSpeed;
 
         // Geometry
         var cbgeometry = new THREE.PlaneGeometry(squareSize * cols, squareSize * rows, cols, rows);
@@ -48,21 +59,36 @@
                 cbgeometry.faces[n + 1].materialIndex = (i % 2 + j) % 2; // Add this line in, the material index should stay the same, we're just doing the other half of the same face
             }
         }
-            
+
         // Mesh
         cb = new THREE.Mesh(cbgeometry, new THREE.MeshFaceMaterial(cbmaterials));
         scene.add(cb);
 
         camera.position.z = 100;
+        stats = new Stats();
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.top = '0px';
+        document.body.appendChild(stats.domElement);
 
-        var render = function () {
-            requestAnimationFrame(render);
-            cb.rotation.x += 0.01;
-            cb.rotation.y += 0.01;
-            renderer.render(scene, camera);
-        };
+        var controls = new function () {
+            this.rotationXSpeed = 0.01;
+            this.rotationYSpeed = 0.01;
+        }
+
+        var gui = new dat.GUI();
+        gui.add(controls, 'rotationXSpeed', 0, 0.1);
+        gui.add(controls, 'rotationYSpeed', 0, 0.1);
 
         render();
+        function render() {
+            requestAnimationFrame(render);
+            cb.rotation.x += controls.rotationXSpeed;
+            cb.rotation.y += controls.rotationYSpeed;
+            renderer.render(scene, camera);
+            stats.update();
+        };
+
+        //render();
     </script>
 </body>
 </html>
