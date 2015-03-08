@@ -23,6 +23,7 @@
     <script src="js/three.min.js"></script>
     <script src="js/stats.min.js"></script>
     <script src="js/dat.gui.min.js"></script>
+    <script src='js/THREEx.FullScreen.js'></script>
     <script>
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -30,6 +31,7 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
+        THREEx
         //parameters
         var squareSize = 8;
         var rows = 8;
@@ -73,17 +75,24 @@
         var controls = new function () {
             this.rotationXSpeed = 0.01;
             this.rotationYSpeed = 0.01;
+            this.Fullscreen = function () {
+                THREEx.FullScreen.request();
+            }
         }
 
         var gui = new dat.GUI();
         gui.add(controls, 'rotationXSpeed', 0, 0.1);
         gui.add(controls, 'rotationYSpeed', 0, 0.1);
+        gui.add(controls, 'Fullscreen');
+
+        //fullscreen
+        
 
         render();
         function render() {
-            requestAnimationFrame(render);
-            cb.rotation.x += controls.rotationXSpeed;
-            cb.rotation.y += controls.rotationYSpeed;
+            //requestAnimationFrame(render);
+            //cb.rotation.x += controls.rotationXSpeed;
+            //cb.rotation.y += controls.rotationYSpeed;
             renderer.render(scene, camera);
             stats.update();
         };
