@@ -84,9 +84,9 @@
         }
 
         var gui = new dat.GUI();
-        gui.add(controls, 'rotationX', -Math.PI / 2, Math.PI / 2);
-        gui.add(controls, 'rotationY', -Math.PI / 2, Math.PI / 2);
-        gui.add(controls, 'rotationZ', -Math.PI / 2, Math.PI / 2);
+        gui.add(controls, 'rotationX', -90, 90);
+        gui.add(controls, 'rotationY', -90, 90);
+        gui.add(controls, 'rotationZ', -90, 90);
         gui.add(controls, 'Fullscreen');
 
         THREEx.WindowResize(renderer, camera);
@@ -95,9 +95,9 @@
         render();
         function render() {
             requestAnimationFrame(render);
-            cb.rotation.x = controls.rotationX;
-            cb.rotation.y = controls.rotationY;
-            cb.rotation.z = controls.rotationZ;
+            cb.rotation.x = controls.rotationX * Math.PI / 180;
+            cb.rotation.y = controls.rotationY * Math.PI / 180;
+            cb.rotation.z = controls.rotationZ * Math.PI / 180;
             renderer.render(scene, camera);
             stats.update();
         };
