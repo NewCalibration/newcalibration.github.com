@@ -24,6 +24,7 @@
     <script src="js/stats.min.js"></script>
     <script src="js/dat.gui.min.js"></script>
     <script src='js/THREEx.FullScreen.js'></script>
+    <script src='js/THREEx.WindowResize.js'></script>
     <script>
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -31,7 +32,6 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        THREEx
         //parameters
         var squareSize = 8;
         var rows = 8;
@@ -73,26 +73,31 @@
         document.body.appendChild(stats.domElement);
 
         var controls = new function () {
-            this.rotationXSpeed = 0.01;
-            this.rotationYSpeed = 0.01;
+            this.rotationX = 0.0;
+            this.rotationY = 0.0;
+            this.rotationZ = 0.0;
             this.Fullscreen = function () {
-                THREEx.FullScreen.request();
+                if (!THREEx.FullScreen.activated()){
+                    THREEx.FullScreen.request();
+                }
             }
         }
 
         var gui = new dat.GUI();
-        gui.add(controls, 'rotationXSpeed', 0, 0.1);
-        gui.add(controls, 'rotationYSpeed', 0, 0.1);
+        gui.add(controls, 'rotationX', -Math.PI / 2, Math.PI / 2);
+        gui.add(controls, 'rotationY', -Math.PI / 2, Math.PI / 2);
+        gui.add(controls, 'rotationZ', -Math.PI / 2, Math.PI / 2);
         gui.add(controls, 'Fullscreen');
 
-        //fullscreen
+        THREEx.WindowResize(renderer, camera);
         
 
         render();
         function render() {
-            //requestAnimationFrame(render);
-            //cb.rotation.x += controls.rotationXSpeed;
-            //cb.rotation.y += controls.rotationYSpeed;
+            requestAnimationFrame(render);
+            cb.rotation.x = controls.rotationX;
+            cb.rotation.y = controls.rotationY;
+            cb.rotation.z = controls.rotationZ;
             renderer.render(scene, camera);
             stats.update();
         };
